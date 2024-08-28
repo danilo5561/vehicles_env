@@ -2,24 +2,42 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.header('Interactive Vehicle Table')
-# lendo os dados
+st.header('Tabela Interativa de Veículos')
+
 csv = r'C:\Users\User\vehicles.csv'
 df_vehicles = pd.read_csv(csv)
 
-hist_button = st.button('Criar histograma')  # criar um botão
+hist_button = st.button('Criar histograma')
 
-if hist_button:  # se o botão for clicado
+if hist_button:
     st.write(
-        'Criando um histograma para o conjunto de dados de anúncios de vendas de carros')
-    # criar um histograma
-    fig = px.histogram(df_vehicles, x="odometer")
+        'Histograma comparativo de preços e ano dos modelos')
 
-    # exibir um gráfico Plotly interativo
+    fig = px.histogram(df_vehicles, y="price", x="model_year")
+
     st.plotly_chart(fig, use_container_width=True)
 
-# criar uma caixa de seleção
 build_histogram = st.checkbox('Criar um histograma')
 
-if build_histogram: # se a caixa de seleção for selecionada
-  st.write('Criando um histograma para a coluna odometer')
+if build_histogram:
+    st.write('Criando um histograma para a coluna odometer')
+
+# outro grafico de barras(selecionando o veículo e apresentando o valor)
+
+st.title("Preços de Veículos")
+
+selected_type = st.selectbox(
+    "Que tipo de veículo você procura?", df_vehicles['type'].unique())
+
+filtered_data = df_vehicles[df_vehicles['type'] == selected_type]
+
+fig = px.bar(filtered_data, x="model", y="price", color="model",
+             title="Preços por Modelo de Veículo")
+st.plotly_chart(fig)
+
+# gráfico de dispersão: estado x ano veiculo
+st.title("Condições do veículo pelo ano")
+
+fig = px.scatter(df_vehicles, x='odometer', y='condition',
+                 color='condition', title='Condições pela Quilometragem')
+st.plotly_chart(fig)
