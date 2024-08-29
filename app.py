@@ -4,8 +4,7 @@ import plotly.express as px
 
 st.header('Tabela Interativa de Veículos')
 
-csv = r'C:\Users\User\vehicles.csv'
-df_vehicles = pd.read_csv(csv)
+df_vehicles = pd.read_csv('vehicles.csv')
 
 hist_button = st.button('Criar histograma')
 
